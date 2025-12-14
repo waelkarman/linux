@@ -1,0 +1,17 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2711";
+
+    fragment@0 {
+        target-path = "/";
+        __overlay__ {
+            buzzer {
+                compatible = "bunchlinux,gpio-buzzer";
+                gpios = <&gpio 17 0>;  // GPIO_ACTIVE_HIGH = 0
+                status = "okay";
+            };
+        };
+    };
+};
