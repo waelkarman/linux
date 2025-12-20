@@ -7,7 +7,7 @@
 #include <linux/device.h>
 #include <linux/uaccess.h>
 
-#define DEVICE_NAME "my-buzzer"
+#define DEVICE_NAME "active-buzzer"
 
 struct buzzer_dev {
     struct gpio_desc *gpio;

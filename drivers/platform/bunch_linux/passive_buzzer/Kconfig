@@ -1,0 +1,7 @@
+config BUZZER
+    tristate "PWM Passive Buzzer driver"
+    default M
+    help
+      Simple PWM Passive Buzzer driver for Raspberry Pi 4
+      Reads the buzzer PWM from the device tree and exposes
+      /dev/passive-buzzer character device.

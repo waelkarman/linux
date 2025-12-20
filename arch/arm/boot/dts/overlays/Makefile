@@ -20,7 +20,8 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
 	allo-katana-dac-audio.dtbo \
 	allo-piano-dac-pcm512x-audio.dtbo \
 	allo-piano-dac-plus-pcm512x-audio.dtbo \
-	bcm2711-rpi-4-b-buzzer.dtbo \
+	bcm2711-rpi-4-b-active-buzzer.dtbo \
+	bcm2711-rpi-4-b-passive-buzzer.dtbo \
 	anyspi.dtbo \
 	apds9960.dtbo \
 	applepi-dac.dtbo \

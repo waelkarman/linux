@@ -1,0 +1,7 @@
+config BUZZER
+    tristate "GPIO Active Buzzer driver"
+    default M
+    help
+      Simple GPIO Active Buzzer driver for Raspberry Pi 4
+      Reads the buzzer GPIO from the device tree and exposes
+      /dev/active-buzzer character device.
