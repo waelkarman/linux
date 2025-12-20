@@ -190,7 +190,7 @@ static void buzzer_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id buzzer_of_match[] = {
-    { .compatible = "bunchlinux,pwm-buzzer" },
+    { .compatible = "bunchlinux,passive-buzzer" },
     { },
 };
 MODULE_DEVICE_TABLE(of, buzzer_of_match);

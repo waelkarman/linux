@@ -105,7 +105,7 @@ static void buzzer_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id buzzer_of_match[] = {
-    { .compatible = "bunchlinux,gpio-buzzer" },
+    { .compatible = "bunchlinux,active-buzzer" },
     { },
 };
 MODULE_DEVICE_TABLE(of, buzzer_of_match);

@@ -13,5 +13,5 @@ obj-$(CONFIG_CHROME_PLATFORMS)	+= chrome/
 obj-$(CONFIG_CZNIC_PLATFORMS)	+= cznic/
 obj-$(CONFIG_SURFACE_PLATFORMS)	+= surface/
 obj-$(CONFIG_ARM64_PLATFORM_DEVICES)	+= arm64/
-obj-$(CONFIG_ACTIVE_BUZZER) += bunch_linux/acive_buzzer/
+obj-$(CONFIG_ACTIVE_BUZZER) += bunch_linux/active_buzzer/
 obj-$(CONFIG_PASSIVE_BUZZER) += bunch_linux/passive_buzzer/

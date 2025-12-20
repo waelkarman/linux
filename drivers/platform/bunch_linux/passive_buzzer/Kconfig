@@ -1,4 +1,4 @@
-config BUZZER
+config PASSIVE_BUZZER
     tristate "PWM Passive Buzzer driver"
     default M
     help

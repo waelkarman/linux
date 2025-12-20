@@ -1,3 +1,11 @@
+Compile for Raspberrypi4
+======================== 
+
+    export ARCH=arm64
+    export CROSS_COMPILE=aarch64-linux-gnu-
+    make bcm2711_defconfig
+    make -j$(nproc)
+
 Linux kernel
 ============
 

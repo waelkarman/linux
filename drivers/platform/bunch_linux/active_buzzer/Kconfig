@@ -1,4 +1,4 @@
-config BUZZER
+config ACTIVE_BUZZER
     tristate "GPIO Active Buzzer driver"
     default M
     help
