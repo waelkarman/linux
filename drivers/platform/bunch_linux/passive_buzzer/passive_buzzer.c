@@ -189,16 +189,15 @@ static void buzzer_remove(struct platform_device *pdev)
     dev_info(&pdev->dev, "PWM Passive Buzzer driver removed\n");
 }
 
-static const struct of_device_id buzzer_of_match[] = {
-    { .compatible = "bunchlinux,passive-buzzer" },
-    { },
+static const struct of_device_id buzzer_of_match = {
+    .compatible = "bunchlinux,passive-buzzer"
 };
 MODULE_DEVICE_TABLE(of, buzzer_of_match);
 
 static struct platform_driver buzzer_driver = {
     .driver = {
         .name = DEVICE_NAME,
-        .of_match_table = buzzer_of_match,
+        .of_match_table = &buzzer_of_match,
     },
     .probe = buzzer_probe,
     .remove_new = buzzer_remove,
