@@ -1197,6 +1197,9 @@ asmlinkage long sys_ni_syscall(void);
 
 asmlinkage long sys_ni_posix_timers(void);
 
+asmlinkage long sys_open_with_initial_comment(
+          const char __user* pathname);
+
 /*
  * Kernel code should not call syscalls (i.e., sys_xyzyyz()) directly.
  * Instead, use one of the functions which work equivalently, such as
