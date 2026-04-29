@@ -6,6 +6,11 @@ Compile for Raspberrypi4
     make bcm2711_defconfig
     make -j$(nproc)
 
+Install https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd and run:
+    export ARCH=arm64
+    export CROSS_COMPILE=aarch64-linux-gnu-
+    make compile_commands.json
+
 Linux kernel
 ============
 
