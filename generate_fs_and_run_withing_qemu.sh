@@ -138,12 +138,16 @@ zcat initramfs.cpio.gz | cpio -t
 # ============================================================
 # AVVIO QEMU
 # ============================================================
+# With initrd:
+#  -initrd initramfs.cpio.gz \
+#  -append "console=ttyAMA0" \
+# With yocto disk:
 
 qemu-system-aarch64 \
   -M virt \
   -cpu cortex-a72 \
-  -m 512M \
+  -m 4G \
   -kernel arch/arm64/boot/Image \
-  -initrd initramfs.cpio.gz \
-  -append "console=ttyAMA0" \
+  -initrd ${YOCTO_CPIO} \
+  -append "console=ttyAMA0 root=/dev/ram0 rw" \
   -nographic
