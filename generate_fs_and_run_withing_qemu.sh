@@ -73,5 +73,5 @@ qemu-system-aarch64 \
   -m 4G \
   -kernel arch/arm64/boot/Image \
   -initrd "${YOCTO_CPIO}" \
-  -append "console=ttyAMA0 rw" \
+  -append "console=ttyAMA0 dwc_otg.lpm_enable=0 net.ifnames=0 audit=0 console=ttyS1,115200 console=tty1 loglevel=8 drm.debug=0 rw" \
   -nographic
