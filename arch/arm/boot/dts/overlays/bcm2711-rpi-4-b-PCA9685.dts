@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: GPL-2.0
+// Overlay per NXP PCA9685 su Raspberry Pi 4 (BCM2711) — i2c1
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2711";  /* target SoC — RPi 4 */
+
+    fragment@0 {
+        target = <&i2c1>;         /* bus I2C-1: SDA=GPIO2, SCL=GPIO3 */
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            pca9685: pwm-controller@40 {
+                compatible = "nxp,pca9685-pwm";
+                #pwm-cells = <2>;           /* <channel period_ns> */
+                reg = <0x40>;               /* indirizzo I2C default */
+            };
+        };
+    };
+
+    /* Override per cambiare indirizzo a runtime */
+    __overrides__ {
+        addr = <&pca9685>, "reg:0";
+    };
+};
