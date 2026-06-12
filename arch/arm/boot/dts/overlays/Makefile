@@ -22,7 +22,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
 	allo-piano-dac-plus-pcm512x-audio.dtbo \
 	bcm2711-rpi-4-b-active-buzzer.dtbo \
 	bcm2711-rpi-4-b-passive-buzzer.dtbo \
-	bcm2711-rpi-4-b-PCA9685.dts \
+	bcm2711-rpi-4-b-PCA9685.dtbo \
 	anyspi.dtbo \
 	apds9960.dtbo \
 	applepi-dac.dtbo \
