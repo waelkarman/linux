@@ -1,10 +1,50 @@
 #!/bin/bash
 set -e
 
+# ============================================================
+# OPZIONI
+# ============================================================
+CLEAN=0
+for arg in "$@"; do
+    case "$arg" in
+        --clean|-c) CLEAN=1 ;;
+        --help|-h)
+            echo "Uso: $0 [--clean]"
+            echo "  --clean   mrproper + build completa da zero (ccache resta attivo)"
+            exit 0
+            ;;
+        *) echo "Opzione sconosciuta: $arg"; exit 1 ;;
+    esac
+done
+
 JOBS=$(nproc)
+CROSS=aarch64-linux-gnu-
 YOCTO_DIR="../build/tmp/deploy/images/bunch-linux-machine"
 YOCTO_CPIO="${YOCTO_DIR}/bunch-linux-demo-bunch-linux-machine.rootfs.cpio.gz"
 YOCTO_CONFIG="${YOCTO_DIR}/kernel.config"
+
+# ============================================================
+# CCACHE
+# ============================================================
+export CCACHE_DIR="${CCACHE_DIR:-$HOME/.ccache}"
+export CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-25G}"
+export CCACHE_SLOPPINESS=time_macros,file_macro,locale,include_file_mtime,include_file_ctime
+export CCACHE_NOHASHDIR=1
+
+# Timestamp/host/user fissi: evitano che compile.h cambi a ogni build
+export KBUILD_BUILD_TIMESTAMP='2026-01-01'
+export KBUILD_BUILD_USER=build
+export KBUILD_BUILD_HOST=build
+
+if ! command -v ccache >/dev/null 2>&1; then
+    echo "ERRORE: ccache non installato (apt install ccache)"
+    exit 1
+fi
+
+# NOTA: ccache non va messo in CROSS_COMPILE, altrimenti finisce anche
+# davanti a ld/ar/objcopy. Si sovrascrivono solo CC e HOSTCC.
+CC_CCACHE="ccache ${CROSS}gcc"
+HOSTCC_CCACHE="ccache gcc"
 
 # ============================================================
 # SANITY CHECK
@@ -25,10 +65,14 @@ echo "cpio   : $(ls -lh ${YOCTO_CPIO})"
 echo "config : $(ls -lh ${YOCTO_CONFIG})"
 
 # ============================================================
-# CLEANUP
+# CLEANUP (solo con --clean)
 # ============================================================
-echo "--- Cleanup kernel ---"
-make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- mrproper
+if [ "${CLEAN}" -eq 1 ]; then
+    echo "--- Cleanup kernel (mrproper) ---"
+    make ARCH=arm64 CROSS_COMPILE=${CROSS} mrproper
+else
+    echo "--- Build incrementale (usa --clean per partire da zero) ---"
+fi
 
 # ============================================================
 # CONFIG DA YOCTO
@@ -42,7 +86,7 @@ cp "${YOCTO_CONFIG}" .config
                  --enable SERIAL_AMBA_PL011 \
                  --enable SERIAL_AMBA_PL011_CONSOLE
 
-make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- olddefconfig
+make ARCH=arm64 CROSS_COMPILE=${CROSS} olddefconfig
 
 # Verifica buzzer dopo olddefconfig
 echo "--- Verifica config buzzer ---"
@@ -51,15 +95,25 @@ grep -E "PASSIVE_BUZZER|ACTIVE_BUZZER|ARM64_PLATFORM" .config || echo "buzzer no
 # ============================================================
 # COMPILAZIONE KERNEL
 # ============================================================
-echo "--- Compilazione kernel ---"
-make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j${JOBS} Image modules
+echo "--- Compilazione kernel (ccache, -j${JOBS}) ---"
+ccache -z >/dev/null
+
+START=$(date +%s)
+make ARCH=arm64 CROSS_COMPILE=${CROSS} \
+     CC="${CC_CCACHE}" \
+     HOSTCC="${HOSTCC_CCACHE}" \
+     -j${JOBS} Image modules
+END=$(date +%s)
+
+echo "--- Statistiche ccache ---"
+ccache -s
 
 if [ ! -f arch/arm64/boot/Image ]; then
     echo "Build kernel fallita"
     exit 1
 fi
 
-echo "--- Kernel compilato ---"
+echo "--- Kernel compilato in $((END - START))s ---"
 file arch/arm64/boot/Image
 
 # ============================================================
